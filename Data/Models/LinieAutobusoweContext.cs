@@ -29,10 +29,8 @@ namespace Data.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var tmp = "LAPTOP-J1STRQHS\\JAKUBKALINA";
-                var into = "LAPTOP-J1STRQHS\\JAKUBKALINA";
                 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=LAPTOP-J1STRQHS\\JAKUBKALINA;Database=LinieAutobusowe;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=.;Database=LinieAutobusowe;Trusted_Connection=True;");
             }
         }
 
