@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Logic;
 using Microsoft.AspNetCore.Mvc;
 using Data.Models;
 using Data.UnitOfWork;
@@ -12,7 +11,6 @@ namespace BusLines.Controllers
 
         public HomeController(IUnitOfWork unitOfWork)
         {
-            Class1 newObj = new Class1();
             _unitOfWork = unitOfWork;
         }
 
