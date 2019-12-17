@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BusLines.Models
+namespace Data.Models
 {
     public partial class VisitedBusStops
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace BusLines.Models
+namespace Data.Models
 {
     public class ErrorViewModel
     {

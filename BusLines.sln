@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusLines", "BusLines\BusLines.csproj", "{43C8AC38-570E-484A-838E-2446C3842432}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusLines", "BusLines\BusLines.csproj", "{43C8AC38-570E-484A-838E-2446C3842432}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3AB418BD-6E7F-49CF-AFD8-2EBAF008DED8} = {3AB418BD-6E7F-49CF-AFD8-2EBAF008DED8}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{3AB418BD-6E7F-49CF-AFD8-2EBAF008DED8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{4CA000A4-6AA2-4038-903B-281286D27F92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,14 @@ Global
 		{43C8AC38-570E-484A-838E-2446C3842432}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43C8AC38-570E-484A-838E-2446C3842432}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43C8AC38-570E-484A-838E-2446C3842432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AB418BD-6E7F-49CF-AFD8-2EBAF008DED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AB418BD-6E7F-49CF-AFD8-2EBAF008DED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AB418BD-6E7F-49CF-AFD8-2EBAF008DED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AB418BD-6E7F-49CF-AFD8-2EBAF008DED8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CA000A4-6AA2-4038-903B-281286D27F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA000A4-6AA2-4038-903B-281286D27F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA000A4-6AA2-4038-903B-281286D27F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA000A4-6AA2-4038-903B-281286D27F92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

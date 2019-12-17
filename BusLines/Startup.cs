@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BusLines.Models;
-using BusLines.Repositories;
-using BusLines.Repositories.Interfaces;
-using BusLines.UnitOfWork;
+using Data.Models;
+using Data.Repositories;
+using Data.Repositories.Interfaces;
+using Data.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +29,7 @@ namespace BusLines
             // Connection string do bazy danych
             var connection = @"Server=.; Database = LinieAutobusowe; Trusted_Connection=True;";
 
-            services.AddDbContext<LinieAutobusoweContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<LinieAutobusoweContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BusLines")));
 
             services.AddMvc();
 
@@ -43,7 +43,7 @@ namespace BusLines
             services.AddScoped<IGenericRepository<Vehicles>, GenericRepository<Vehicles>>();
             services.AddScoped<IGenericRepository<VisitedBusStops>, GenericRepository<VisitedBusStops>>();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
         }

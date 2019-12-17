@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace BusLines.Models
+namespace Data.Models
 {
     public partial class LinieAutobusoweContext : DbContext
     {
@@ -29,6 +29,8 @@ namespace BusLines.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+                var tmp = "LAPTOP-J1STRQHS\\JAKUBKALINA";
+                var into = "LAPTOP-J1STRQHS\\JAKUBKALINA";
                 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=LAPTOP-J1STRQHS\\JAKUBKALINA;Database=LinieAutobusowe;Trusted_Connection=True;");
             }

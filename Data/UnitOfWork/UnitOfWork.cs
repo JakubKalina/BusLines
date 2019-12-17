@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusLines.Models;
-using BusLines.Repositories;
-using BusLines.Repositories.Interfaces;
+﻿using Data.Models;
+using Data.Repositories;
+using Data.Repositories.Interfaces;
 
-namespace BusLines.UnitOfWork
+namespace Data.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

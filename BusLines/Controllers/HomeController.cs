@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using Logic;
 using Microsoft.AspNetCore.Mvc;
-using BusLines.Models;
-using BusLines.UnitOfWork;
+using Data.Models;
+using Data.UnitOfWork;
 
 namespace BusLines.Controllers
 {
@@ -15,6 +12,7 @@ namespace BusLines.Controllers
 
         public HomeController(IUnitOfWork unitOfWork)
         {
+            Class1 newObj = new Class1();
             _unitOfWork = unitOfWork;
         }
 

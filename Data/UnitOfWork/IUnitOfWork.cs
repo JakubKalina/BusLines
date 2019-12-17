@@ -1,11 +1,9 @@
-﻿using BusLines.Models;
-using BusLines.Repositories.Interfaces;
+﻿using Data.Models;
+using Data.Repositories.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BusLines.UnitOfWork
+
+namespace Data.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
