@@ -22,6 +22,7 @@ namespace BusLines.Controllers
         public IActionResult Index()
         {
             var allEmployees = _unitOfWork.EmployeesRepository.GetAll();
+            var allShitfs = _unitOfWork.ShiftsRepository.GetAll();
             return View();
         }
 
