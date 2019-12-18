@@ -6,6 +6,8 @@ using Data.Models;
 using Data.Repositories;
 using Data.Repositories.Interfaces;
 using Data.UnitOfWork;
+using Logic.Services;
+using Logic.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +43,8 @@ namespace BusLines
             services.AddScoped<IGenericRepository<VisitedBusStops>, GenericRepository<VisitedBusStops>>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IAccountService, AccountService>();
 
 
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Logic.Services.Interfaces
 {
-    interface IAccountService : IService
+    public interface IAccountService : IService
     {
     }
 }

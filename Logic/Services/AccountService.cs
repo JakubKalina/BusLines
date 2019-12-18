@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Logic.Services.Interfaces;
 
 namespace Logic.Services
 {
-    class AccountService : Service, IAccountService, IDisposable
+    public class AccountService : Service, IAccountService, IDisposable
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountService _accountService;
 
         private static bool _firstRun = true;
 
@@ -23,14 +25,5 @@ namespace Logic.Services
             throw new NotImplementedException();
         }
 
-        public Task<string> UpdateDatabaseAsync(IUnitOfWork unitOfWork)
-        {
-            throw new NotImplementedException();
-        }
-
-        string Lol()
-        {
-            return "LOL";
-        }
     }
 }

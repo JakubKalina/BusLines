@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Data.UnitOfWork;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Logic.Services.Interfaces
 {
-    interface IService
+    public interface IService
     {
         /// <summary>
         /// Aktualizuje bazę danych, a w przypadku wyjątku zwraca wiadomość zwrotną
@@ -13,6 +15,5 @@ namespace Logic.Services.Interfaces
         /// <returns></returns>
         string UpdateDatabase(IUnitOfWork unitOfWork);
 
-        Task<string> UpdateDatabaseAsync(IUnitOfWork unitOfWork);
     }
 }
