@@ -7,7 +7,7 @@ namespace Data.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly LinieAutobusoweContext _context;
+        protected readonly LinieAutobusoweContext _context;
 
         public GenericRepository(LinieAutobusoweContext context)
         {
