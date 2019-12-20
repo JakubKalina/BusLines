@@ -71,5 +71,24 @@ namespace BusLines.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Zwraca widok rejestracji pracownika
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(UserRegisterViewModel model)
+        {
+            return View();
+        }
+
     }
 }
