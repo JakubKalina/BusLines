@@ -14,15 +14,13 @@ namespace Logic.Services
     public class AccountService : Service, IAccountService, IDisposable
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IAccountService _accountService;
         private readonly IUserManager _userManager;
 
         private static bool _firstRun = true;
 
-        public AccountService(IUnitOfWork unitOfWork, IAccountService accountService, IUserManager userManager)
+        public AccountService(IUnitOfWork unitOfWork, IUserManager userManager)
         {
             _unitOfWork = unitOfWork;
-            _accountService = accountService;
             _userManager = userManager;
         }
 
@@ -43,7 +41,11 @@ namespace Logic.Services
         public async Task<string> LoginAsync(UserLoginViewModel model)
         {
             var user = _userManager.LoginUser(model.Username, model.Password);
-            if (user == false) return "Nieprawidłowa nazwa użytkownika lub hasło.";
+            if (user.Result == false) return "Nieprawidłowa nazwa użytkownika lub hasło.";
+
+            // Dodać zapamietywanie do sesji
+
+            return "";
 
         }
 

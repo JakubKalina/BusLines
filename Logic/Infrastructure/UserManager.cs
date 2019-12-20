@@ -25,7 +25,14 @@ namespace Logic.Infrastructure
         public async Task<bool> UserIsValid(string username, string password)
         {
             var user = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(username);
-            if (user.Login == username && user.Password == password) return true;
+            if(user == null)
+            {
+                return false;
+            }
+            if (user.Login == username && user.Password == password)
+            {
+                return true;
+            }
             else return false;
         }
 

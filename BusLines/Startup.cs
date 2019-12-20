@@ -50,6 +50,7 @@ namespace BusLines
 
             services.AddScoped<IUserManager, UserManager>();
 
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         }
 
