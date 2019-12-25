@@ -10,6 +10,7 @@ using Logic.Infrastructure;
 using Logic.Infrastructure.Interfaces;
 using Logic.Services;
 using Logic.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,11 @@ namespace BusLines
 
             services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options => {
+                options.LoginPath = "/Account/Login/";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +74,7 @@ namespace BusLines
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

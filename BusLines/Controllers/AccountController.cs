@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Logic.Infrastructure.Interfaces;
 using Logic.Services.Interfaces;
 using Logic.ViewModels.Account;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+
+using Microsoft.AspNetCore.Http;
+using System.Web;
+using Microsoft.Owin.Host.SystemWeb;
 
 namespace BusLines.Controllers
 {
@@ -51,11 +58,17 @@ namespace BusLines.Controllers
             // Hashowanie hasła użytkownika
             model.Password = _passwordHasher.Hash(model.Password);
 
-            var loginResult = await _accountService.LoginAsync(model);
+            var principal = await _accountService.LoginAsync(model);
 
-            if (loginResult == string.Empty) return RedirectToPage(returnUrl);
+            if (principal == null) return RedirectToPage(returnUrl);
 
-            ModelState.AddModelError("", loginResult);
+
+            // Wyświetlenie informacji o nieprawidłowych danych
+            ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
+
+            // Zapamiętanie zalogowanego użytkownika
+            await HttpContext.SignInAsync(principal);
+
 
             return View(model);
         }

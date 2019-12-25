@@ -8,6 +8,7 @@ using Logic.Services.Interfaces;
 using Logic.ViewModels.Account;
 using Logic.Infrastructure;
 using Logic.Infrastructure.Interfaces;
+using System.Security.Claims;
 
 namespace Logic.Services
 {
@@ -38,14 +39,14 @@ namespace Logic.Services
         /// Logowanie użytkownika
         /// </summary>
         /// <returns></returns>
-        public async Task<string> LoginAsync(UserLoginViewModel model)
+        public async Task<ClaimsPrincipal> LoginAsync(UserLoginViewModel model)
         {
-            var user = _userManager.LoginUser(model.Username, model.Password);
-            if (user.Result == false) return "Nieprawidłowa nazwa użytkownika lub hasło.";
+            var ident = await _userManager.LoginUser(model.Username, model.Password);
+            if (ident == null) return null;
 
+            return ident;
             // Dodać zapamietywanie do sesji
 
-            return "";
 
         }
 
