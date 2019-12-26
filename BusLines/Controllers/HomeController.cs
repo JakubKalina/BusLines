@@ -14,25 +14,10 @@ namespace BusLines.Controllers
             _unitOfWork = unitOfWork;
         }
 
-
         public IActionResult Index()
         {
             var allEmployees = _unitOfWork.EmployeesRepository.GetAll();
             var allShitfs = _unitOfWork.ShiftsRepository.GetAll();
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
