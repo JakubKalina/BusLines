@@ -107,7 +107,35 @@ namespace BusLines.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(UserRegisterViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid) return View(model);
+
+            var result = await _accountService.RegisterAsync(model);
+
+            if(result == true)
+            {
+                return RedirectToAction("Register", "Account");//wyświetlić komunikat, że się udało
+            }
+            else
+            {
+                // Wyświetlenie informacji o nieprawidłowych danych
+                ModelState.AddModelError("", "Wprowadzono nieprawidłowe dane.");
+
+                return View(model);
+            }
+        }
+
+
+        /// <summary>
+        ///     Wylogowuje użytkownika i przenosi go na ekran logowania.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Logout()
+        {
+            /// TODO
+           // _accountService.Logout(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Login", "Account");
         }
 
     }

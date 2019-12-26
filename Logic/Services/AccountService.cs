@@ -45,11 +45,18 @@ namespace Logic.Services
             if (ident == null) return null;
 
             return ident;
-            // Dodać zapamietywanie do sesji
-
-
         }
 
+        /// <summary>
+        /// Rejestracja użytkownika
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public Task<bool> RegisterAsync(UserRegisterViewModel model)
+        {
+            // Dodac mapowanie z ViewModelu na Model
 
+            throw new NotImplementedException();
+        }
     }
 }
