@@ -109,9 +109,16 @@ namespace BusLines.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var result = await _accountService.RegisterAsync(model);
+                var result =  _accountService.RegisterAsync(model);
+            
 
-            if(result == true)
+            
+
+            //Testowy powrót
+            return View("Login");
+
+            /*
+            if (result == true)
             {
                 return RedirectToAction("Register", "Account");//wyświetlić komunikat, że się udało
             }
@@ -122,6 +129,7 @@ namespace BusLines.Controllers
 
                 return View(model);
             }
+            */
         }
 
 

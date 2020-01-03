@@ -9,6 +9,8 @@ using Logic.ViewModels.Account;
 using Logic.Infrastructure;
 using Logic.Infrastructure.Interfaces;
 using System.Security.Claims;
+using AutoMapper;
+using Data.Models;
 
 namespace Logic.Services
 {
@@ -16,13 +18,15 @@ namespace Logic.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserManager _userManager;
+        private readonly IMapper _mapper;
 
         private static bool _firstRun = true;
 
-        public AccountService(IUnitOfWork unitOfWork, IUserManager userManager)
+        public AccountService(IUnitOfWork unitOfWork, IUserManager userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public void Dispose()
@@ -52,11 +56,22 @@ namespace Logic.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public Task<bool> RegisterAsync(UserRegisterViewModel model)
+        public async Task<bool> RegisterAsync(UserRegisterViewModel viewModel)
         {
-            // Dodac mapowanie z ViewModelu na Model
+            var model = _mapper.Map<Employees>(viewModel);
 
-            throw new NotImplementedException();
+            var allEmployees = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(model.Login);
+            // Dodać wyszukiwanie czy nie istnieje już taki użytkownik
+
+            _unitOfWork.EmployeesRepository.Create(model);
+            _unitOfWork.EmployeesRepository.Save();
+
+
+            // Dodać hashowanie hasła użytkownika
+            var i = 1;
+
+            return true;
+
         }
     }
 }

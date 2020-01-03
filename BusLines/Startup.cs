@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Data.Models;
 using Data.Repositories;
 using Data.Repositories.Interfaces;
@@ -33,6 +34,15 @@ namespace BusLines
         {
             services.AddDbContext<LinieAutobusoweContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BusLines")));
 
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddMvc();
 
             services.AddScoped<IGenericRepository<BusStops>, GenericRepository<BusStops>>();
@@ -52,7 +62,6 @@ namespace BusLines
             services.AddScoped<IUserManager, UserManager>();
 
             services.AddScoped<IPasswordHasher, PasswordHasher>();
-
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options => {
