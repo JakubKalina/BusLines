@@ -44,6 +44,8 @@ namespace BusLines
             services.AddSingleton(mapper);
 
             services.AddMvc();
+            services.AddMvc().AddControllersAsServices();
+
 
             services.AddScoped<IGenericRepository<BusStops>, GenericRepository<BusStops>>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();

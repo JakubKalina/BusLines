@@ -10,17 +10,19 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Host.SystemWeb;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Logic.Infrastructure
 {
     public class UserManager : IUserManager
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly Interfaces.IPasswordHasher _passwordHasher;
 
-        public UserManager(IUnitOfWork unitOfWork)
+        public UserManager(IUnitOfWork unitOfWork, Interfaces.IPasswordHasher passwordHasher)
         {
             _unitOfWork = unitOfWork;
+            _passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -60,8 +62,10 @@ namespace Logic.Infrastructure
                 else return null;
 
 
-                var userIdentity = new ClaimsIdentity(claims, "login");
-                ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+                //var userIdentity = new ClaimsIdentity(claims, "login");
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
                 return principal;
 
@@ -78,17 +82,22 @@ namespace Logic.Infrastructure
         /// <summary>
         /// Walidacja użytkownika
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
+        /// <param name="username">Login użytkownika</param>
+        /// <param name="password">Hasło użytkownika niezahashowane</param>
         /// <returns></returns>
         public async Task<string> UserIsValid(string username, string password)
         {
             var user = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(username);
+
             if(user == null)
             {
                 return null;
             }
-            if (user.Login == username && user.Password == password)
+
+            var mathingPasswords = _passwordHasher.Check(user.Password, password);
+
+
+            if (mathingPasswords.Verified)
             {
                 return user.Role.ToString();
             }

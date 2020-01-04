@@ -9,20 +9,22 @@ using Logic.ViewModels.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 using Microsoft.AspNetCore.Http;
 using System.Web;
 using Microsoft.Owin.Host.SystemWeb;
+using Microsoft.AspNet.Identity;
 
 namespace BusLines.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly Logic.Infrastructure.Interfaces.IPasswordHasher _passwordHasher;
 
-        public AccountController(IAccountService accountService, IPasswordHasher passwordHasher)
+        public AccountController(IAccountService accountService, Logic.Infrastructure.Interfaces.IPasswordHasher passwordHasher)
         {
             _accountService = accountService;
             _passwordHasher = passwordHasher;
@@ -50,29 +52,25 @@ namespace BusLines.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(UserLoginViewModel model, string returnUrl)
+        public async Task<IActionResult> Login(UserLoginViewModel model, string returnUrl = null)
         {
             // Jeśeli stan modelu się nie zgadza
             if (!ModelState.IsValid) return View(model);
 
-            // Hashowanie hasła użytkownika
-            model.Password = _passwordHasher.Hash(model.Password);
-
             var principal = await _accountService.LoginAsync(model);
 
-            if (principal == null) return RedirectToPage(returnUrl);
+            if (principal == null)
+            {
+                //return RedirectToPage(returnUrl);
+                ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
+                return View(model);           
+            }
 
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            // Wyświetlenie informacji o nieprawidłowych danych
-            ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
-
-            // Zapamiętanie zalogowanego użytkownika
-            await HttpContext.SignInAsync(principal);
-
-
-            return View(model);
+            return View("Register");
         }
-        
+
         /// <summary>
         /// Zwraca widok przywracania hasła
         /// </summary>
@@ -109,10 +107,13 @@ namespace BusLines.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-                var result =  _accountService.RegisterAsync(model);
+            // Hashowanie hasła użytkownika
+            model.Password = _passwordHasher.Hash(model.Password);
+
+            var result = await  _accountService.RegisterAsync(model);
             
 
-            
+         
 
             //Testowy powrót
             return View("Login");
@@ -138,13 +139,15 @@ namespace BusLines.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            /// TODO
-           // _accountService.Logout(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Login", "Account");
+            await HttpContext.SignOutAsync();
+            return View("Login");
         }
+
+
 
     }
 }

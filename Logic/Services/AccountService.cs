@@ -11,6 +11,7 @@ using Logic.Infrastructure.Interfaces;
 using System.Security.Claims;
 using AutoMapper;
 using Data.Models;
+using Microsoft.Owin.Security;
 
 namespace Logic.Services
 {
@@ -73,5 +74,6 @@ namespace Logic.Services
             return true;
 
         }
+
     }
 }
