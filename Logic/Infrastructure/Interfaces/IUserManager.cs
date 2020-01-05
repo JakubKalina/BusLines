@@ -9,5 +9,6 @@ namespace Logic.Infrastructure.Interfaces
     public interface IUserManager
     {
         Task<ClaimsPrincipal> LoginUser(string username, string password);
+        Task<string> UserIsValid(string username, string password);
     }
 }

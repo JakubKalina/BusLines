@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Logic.Services.Interfaces
 {
-    public interface IAccountService : IService
+    public interface IAccountService
     {
         Task<ClaimsPrincipal> LoginAsync(UserLoginViewModel model);
         Task<bool> RegisterAsync(UserRegisterViewModel model);

@@ -15,7 +15,7 @@ using Microsoft.Owin.Security;
 
 namespace Logic.Services
 {
-    public class AccountService : Service, IAccountService, IDisposable
+    public class AccountService : IAccountService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserManager _userManager;
@@ -46,10 +46,10 @@ namespace Logic.Services
         /// <returns></returns>
         public async Task<ClaimsPrincipal> LoginAsync(UserLoginViewModel model)
         {
-            var ident = await _userManager.LoginUser(model.Username, model.Password);
-            if (ident == null) return null;
+            var result = await _userManager.LoginUser(model.Username, model.Password);
+            if (result == null) return null;
 
-            return ident;
+            return result;
         }
 
         /// <summary>

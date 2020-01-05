@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Data.Models;
 using Data.UnitOfWork;
+using System.Threading.Tasks;
 
 namespace BusLines.Controllers
 {
@@ -11,7 +12,10 @@ namespace BusLines.Controllers
         public IActionResult Index()
         {
             return View();
+            // To działa !
+            //return RedirectToAction("Login", "Account");
         }
+
 
         public IActionResult Error()
         {

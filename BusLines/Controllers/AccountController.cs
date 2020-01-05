@@ -10,21 +10,18 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
-
 using Microsoft.AspNetCore.Http;
 using System.Web;
 using Microsoft.Owin.Host.SystemWeb;
-using Microsoft.AspNet.Identity;
 
 namespace BusLines.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
-        private readonly Logic.Infrastructure.Interfaces.IPasswordHasher _passwordHasher;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public AccountController(IAccountService accountService, Logic.Infrastructure.Interfaces.IPasswordHasher passwordHasher)
+        public AccountController(IAccountService accountService, IPasswordHasher passwordHasher)
         {
             _accountService = accountService;
             _passwordHasher = passwordHasher;
@@ -54,21 +51,20 @@ namespace BusLines.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserLoginViewModel model, string returnUrl = null)
         {
-            // Jeśeli stan modelu się nie zgadza
+            //Jeśli stan modelu się nie zgadza
             if (!ModelState.IsValid) return View(model);
 
             var principal = await _accountService.LoginAsync(model);
 
             if (principal == null)
             {
-                //return RedirectToPage(returnUrl);
                 ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
-                return View(model);           
+                return View(model);
             }
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            return View("Register");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -111,28 +107,19 @@ namespace BusLines.Controllers
             model.Password = _passwordHasher.Hash(model.Password);
 
             var result = await  _accountService.RegisterAsync(model);
-            
-
-         
-
-            //Testowy powrót
-            return View("Login");
-
-            /*
-            if (result == true)
+                  
+            if(result == true)
             {
-                return RedirectToAction("Register", "Account");//wyświetlić komunikat, że się udało
+                return RedirectToAction("Login");//wyświetlić komunikat, że się udało
             }
             else
             {
-                // Wyświetlenie informacji o nieprawidłowych danych
+                //Wyświetlenie informacji o nieprawidłowych danych
                 ModelState.AddModelError("", "Wprowadzono nieprawidłowe dane.");
 
                 return View(model);
             }
-            */
         }
-
 
         /// <summary>
         ///     Wylogowuje użytkownika i przenosi go na ekran logowania.
@@ -144,9 +131,8 @@ namespace BusLines.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return View("Login");
+            return RedirectToAction("Login");
         }
-
 
 
     }

@@ -57,9 +57,10 @@ namespace BusLines
             services.AddScoped<IGenericRepository<Vehicles>, GenericRepository<Vehicles>>();
             services.AddScoped<IGenericRepository<VisitedBusStops>, GenericRepository<VisitedBusStops>>();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
             services.AddScoped<IAccountService, AccountService>();
+
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserManager, UserManager>();
 
