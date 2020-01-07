@@ -11,5 +11,7 @@ namespace Logic.Services.Interfaces
     {
         Task<ClaimsPrincipal> LoginAsync(UserLoginViewModel model);
         Task<bool> RegisterAsync(UserRegisterViewModel model);
+        Task<EditProfileViewModel> EditProfileAsync(string login);
+        Task<EditProfileViewModel> EditProfileAsync(EditProfileViewModel model, string login);
     }
 }

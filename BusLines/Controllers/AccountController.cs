@@ -145,12 +145,9 @@ namespace BusLines.Controllers
         public async Task<IActionResult> EditProfile()
         {
             // Wyszukanie loginu aktualnie zalogowanego użytkownika
-            var user = HttpContext.User.Identity.Name;
-
-            //var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
-            //var model = _mapper.Map<ApplicationUser, AccountEditProfileApplicationUserViewModel>(user);
-            //return View(model);
-            return View();
+            var userLogin = HttpContext.User.Identity.Name;
+            var model = await _accountService.EditProfileAsync(userLogin);
+            return View(model);
         }
 
         /// <summary>
@@ -158,24 +155,28 @@ namespace BusLines.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditProfile(AccountEditProfileApplicationUserViewModel model)
-        //{
-        //    //if (!ModelState.IsValid) return View(model);
-        //    //var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
 
-        //    //_mapper.Map(model, user);
+            // Wyszukanie loginu aktualnie zalogowanego użytkownika
+            var userLogin = HttpContext.User.Identity.Name;
+            var user = await _accountService.EditProfileAsync(model, userLogin);
 
-        //    //var result = await _accountService.UpdateUserAsync(user);
+            // Jeśli nie udało się zapisać zmian
+            if(user == null)
+            {
+                ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
+            }
+            else
+            {
+                ViewBag.Message = "Profil został zaktualizowany";
+            }
 
-        //    //if (result.Succeeded)
-        //    //    ViewBag.Message = "Profil został zaktualizowany";
-        //    //else
-        //    //    ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
-
-        //    //return View(model);
-        //}
+            return View(model);
+        }
 
         /// <summary>
         ///     Zwraca formularz do zmiany hasła.

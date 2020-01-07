@@ -75,5 +75,45 @@ namespace Logic.Services
 
         }
 
+        /// <summary>
+        /// Wyszukuje użytkownika po jego loginie
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
+        public async Task<EditProfileViewModel> EditProfileAsync(string login)
+        {
+            var user = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(login);
+            var viewModel = _mapper.Map<EditProfileViewModel>(user);
+            return viewModel;
+        }
+
+        /// <summary>
+        /// Dokonuje edycji i zapisu danych użytkownika
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<EditProfileViewModel> EditProfileAsync(EditProfileViewModel model, string login)
+        {
+            var user = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(login);
+
+            // Aktualizacja danych użytkownika
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.PhoneNumber = model.PhoneNumber;
+            user.EmailAddress = model.EmailAddress;
+
+            try
+            {
+                _unitOfWork.EmployeesRepository.Update(user);
+                var userEdited = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(login);
+                var result = _mapper.Map<EditProfileViewModel>(userEdited);
+                return result;
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+
     }
 }

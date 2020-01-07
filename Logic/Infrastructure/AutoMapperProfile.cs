@@ -15,6 +15,8 @@ namespace Logic.Infrastructure
             CreateMap<Employees, UserRegisterViewModel>();
             CreateMap<UserLoginViewModel, Employees>();
             CreateMap<Employees, UserLoginViewModel>();
+            CreateMap<EditProfileViewModel, Employees>();
+            CreateMap<Employees, EditProfileViewModel>();
         }
     }
 }

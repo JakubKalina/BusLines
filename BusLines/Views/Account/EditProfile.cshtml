@@ -1,7 +1,54 @@
-﻿
+﻿@model Logic.ViewModels.Account.EditProfileViewModel
 @{
-    ViewData["Title"] = "EditProfile";
+    ViewBag.Title = "Edycja profilu";
 }
 
-<h2>EditProfile</h2>
+<h2>Edycja profilu</h2>
 
+<!--Dodać obsługe ViewBag i wyświetlenie powiadomienia jesli udało się zpaisać zmiany-->
+
+@using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Zmień szczegóły dotyczące Twojego konta</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <!--Imię-->
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <!--Nazwisko-->
+    <div class="form-group">
+        @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <!--Numer telefonu-->
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control " })
+        </div>
+    </div>
+
+    <!--Adres email-->
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmailAddress, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", @type = "email" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Zapisz" />
+        @Html.ActionLink("Zmiana hasła", "ChangePassword", null, new { @class = "btn offset-4 offset-md-3 offset-lg-2" })
+    </div>
+
+}
