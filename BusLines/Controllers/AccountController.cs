@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using System.Web;
 using Microsoft.Owin.Host.SystemWeb;
+using BusLines.Utilities;
 
 namespace BusLines.Controllers
 {
@@ -67,16 +68,6 @@ namespace BusLines.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        /// <summary>
-        /// Zwraca widok przywracania hasła
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
 
         /// <summary>
         /// Zwraca widok rejestracji pracownika
@@ -197,6 +188,7 @@ namespace BusLines.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
@@ -206,7 +198,6 @@ namespace BusLines.Controllers
             var userLogin = HttpContext.User.Identity.Name;
 
             // Hashowanie hasła użytkownika
-            model.OldPassword = _passwordHasher.Hash(model.OldPassword);
             model.NewPassword = _passwordHasher.Hash(model.NewPassword);
             model.ConfirmPassword = _passwordHasher.Hash(model.ConfirmPassword);
 
@@ -215,52 +206,29 @@ namespace BusLines.Controllers
             // dodać komunikat że haslo zostało zmienione
             // TODO
 
-            if (result != null) return RedirectToAction("Login", "Account");
+            if (result != null)
+            {
+                await HttpContext.SignOutAsync();
+                return RedirectToAction("Login");
+            }
 
             // Jeśli podano nieprawidłowe stare hasło to wyświetl komunikat
-            
+            ModelState.AddModelError("", "Podane obecne hasło jest nieprawidłowe");
+
             return View(model);
         }
-
-        /// <summary>
-        ///     Widok wyświetlany po kliknięciu w link aktywacyjny użytkownika, który zarejestrował się przez API.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ConfirmEmailApi()
-        {
-            return View();
-        }
-
-        /// <summary>
-        ///     Widok wyświetlany po kliknięciu w link aktywacyjny użytkownika,
-        ///     który zarejestrował się przez MVC,
-        ///     pod warunkiem, że potwierdzenie adresu email się powiodło.
-        /// </summary>
-        /// <param name="userId">id użytkownika</param>
-        /// <param name="code">token do weryfikacji</param>
-        /// <returns></returns>
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        //{
-        //    //if (userId == null || code == null) return View("Error");
-        //    //var result = await _accountService.ConfirmUserEmailAsync(userId, code);
-        //    //return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        //}
 
         /// <summary>
         ///     Widok dla przypomnienia hasła, w którym użytkownik wprowadza adres email,
         ///     na który ma zostać wysłany link do resetowania hasła.
         /// </summary>
         /// <returns></returns>
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult ForgotPassword()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
 
         /// <summary>
         ///     Wysyła polecenie, by sprawdzić czy użytkownik potwierdził email.
@@ -269,27 +237,22 @@ namespace BusLines.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ForgotPassword(AccountForgotPasswordApplicationUserViewModel model)
-        //{
-        //    //if (!ModelState.IsValid) return View(model);
-        //    //var user = await _accountService.FindUserByEmailAsync(model.Email);
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
 
-        //    //if (user == null)
-        //    //    // Nie pokazuj, że użytkownika nie ma w bazie
-        //    //    return View("ForgotPasswordConfirmation");
+            Constants.Home = HttpContext.Request.Path;
 
-        //    //var isUserEmailConfirmed = await _accountService.IsUserEmailConfirmedAsync(user.Id);
 
-        //    //// W zależności od stanu potwierdzenia adresu użytkownika wyśle link aktywujący konto lub link do resetu hasła
-        //    //await _accountService.ForgotPasswordAsync(user.Id);
 
-        //    //return isUserEmailConfirmed
-        //    //    ? (ActionResult)RedirectToAction("ForgotPasswordConfirmation", "Account")
-        //    //    : View("PleaseConfirmEmail");
-        //}
+
+
+
+            return RedirectToAction("ForgotPasswordConfirmation", "Account");
+        }
 
         /// <summary>
         ///     Widok potwierdzający zmianę hasła - informuje

@@ -20,14 +20,17 @@ namespace Logic.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserManager _userManager;
         private readonly IMapper _mapper;
+        private readonly IPasswordHasher _passwordHasher;
+
 
         private static bool _firstRun = true;
 
-        public AccountService(IUnitOfWork unitOfWork, IUserManager userManager, IMapper mapper)
+        public AccountService(IUnitOfWork unitOfWork, IUserManager userManager, IMapper mapper, IPasswordHasher passwordHasher)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _mapper = mapper;
+            _passwordHasher = passwordHasher;
         }
 
         public void Dispose()
@@ -121,28 +124,55 @@ namespace Logic.Services
         public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel model, string login)
         {
             var user = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(login);
+        
+            var mathingPasswords = _passwordHasher.Check(user.Password, model.OldPassword);
 
             // Jeśli stare hasło jest prawidłowe
-
-
-            // zamiast == użyć metody chack z hashera
-
-            if (user.Password == model.OldPassword)
+            if (mathingPasswords.Verified)
             {
                 user.Password = model.NewPassword;
-                //try
-                //{
+                try
+                {
                     _unitOfWork.EmployeesRepository.Update(user);
                     var userEdited = _mapper.Map<ChangePasswordViewModel>(user);
                     return userEdited;
-                //}
-                //catch(Exception)
-                //{
-                //    return null;
-                //}
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
             else return null; // Jesli stare hasło jest nieprawidłowe
 
+        }
+
+        /// <summary>
+        /// Dokonuje wysłania linku do resetu hasła użytkownika
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<bool> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            var user = await _unitOfWork.EmployeesRepository.GetUserByEmailAddressAsync(model.Email);
+
+            if(user != null)
+            {
+                // Generowanie kodu - tymczasowego hasła
+                //var code = await _userManager.GeneratePasswordResetTokenAsync(userId);
+
+                //var callbackUrl = new Uri(Constants.Home + "/Account/ResetPassword").AddParameter("userId", user.Id)
+                //    .AddParameter("code", code)
+                //    .ToString();
+
+                //await _userManager.SendEmailAsync(userId, "Reset hasła",
+                //    "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+
+                return true; 
+            }
+            else // Nie pokazuj, że użytkownika nie ma w bazie
+            {
+                return false;
+            }
         }
 
     }

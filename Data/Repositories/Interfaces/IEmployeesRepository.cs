@@ -9,5 +9,6 @@ namespace Data.Repositories.Interfaces
     public interface IEmployeesRepository : IGenericRepository<Employees>
     {
         Task<Employees> GetUserByUsernameAsync(string username);
+        Task<Employees> GetUserByEmailAddressAsync(string emailAddress);
     }
 }

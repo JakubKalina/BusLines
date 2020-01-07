@@ -16,5 +16,10 @@ namespace Data.Repositories
         {
             return await _context.Set<Employees>().SingleOrDefaultAsync(c => c.Login == username);
         }
+
+        public async Task<Employees> GetUserByEmailAddressAsync(string emailAddress)
+        {
+            return await _context.Set<Employees>().SingleOrDefaultAsync(c => c.EmailAddress == emailAddress);
+        }
     }
 }

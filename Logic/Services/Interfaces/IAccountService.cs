@@ -14,5 +14,6 @@ namespace Logic.Services.Interfaces
         Task<EditProfileViewModel> EditProfileAsync(string login);
         Task<EditProfileViewModel> EditProfileAsync(EditProfileViewModel model, string login);
         Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel model, string login);
+        Task<bool> ForgotPassword(ForgotPasswordViewModel model);
     }
 }
