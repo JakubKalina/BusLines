@@ -163,6 +163,7 @@ namespace BusLines.Controllers
 
             // Wyszukanie loginu aktualnie zalogowanego użytkownika
             var userLogin = HttpContext.User.Identity.Name;
+
             var user = await _accountService.EditProfileAsync(model, userLogin);
 
             // Jeśli nie udało się zapisać zmian
@@ -195,19 +196,31 @@ namespace BusLines.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ChangePassword(AccountChangePasswordApplicationUserViewModel model)
-        //{
-        //    //if (!ModelState.IsValid) return View(model);
-        //    //var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
-        //    //var result = await _accountService.ChangeUserPasswordAsync(user.Id, model.OldPassword, model.NewPassword);
-        //    //if (result.Succeeded) return RedirectToAction("Login", "Account");
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
 
-        //    //AddErrors(result);
+            // Wyszukanie loginu aktualnie zalogowanego użytkownika
+            var userLogin = HttpContext.User.Identity.Name;
 
-        //    //return View(model);
-        //}
+            // Hashowanie hasła użytkownika
+            model.OldPassword = _passwordHasher.Hash(model.OldPassword);
+            model.NewPassword = _passwordHasher.Hash(model.NewPassword);
+            model.ConfirmPassword = _passwordHasher.Hash(model.ConfirmPassword);
+
+            var result = await _accountService.ChangePasswordAsync(model, userLogin);
+
+            // dodać komunikat że haslo zostało zmienione
+            // TODO
+
+            if (result != null) return RedirectToAction("Login", "Account");
+
+            // Jeśli podano nieprawidłowe stare hasło to wyświetl komunikat
+            
+            return View(model);
+        }
 
         /// <summary>
         ///     Widok wyświetlany po kliknięciu w link aktywacyjny użytkownika, który zarejestrował się przez API.

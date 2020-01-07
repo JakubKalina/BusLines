@@ -62,17 +62,14 @@ namespace Logic.Services
             var model = _mapper.Map<Employees>(viewModel);
 
             var allEmployees = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(model.Login);
+
             // Dodać wyszukiwanie czy nie istnieje już taki użytkownik
+            // TODO
 
             _unitOfWork.EmployeesRepository.Create(model);
             _unitOfWork.EmployeesRepository.Save();
 
-
-            // Dodać hashowanie hasła użytkownika
-            var i = 1;
-
             return true;
-
         }
 
         /// <summary>
@@ -113,6 +110,39 @@ namespace Logic.Services
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Dokonuje walidacji aktualnego hasła i zmienia na nowe hasło
+        /// </summary>
+        /// <param name="model">Model do zmiany hasła</param>
+        /// <param name="login">Login zalogowanego użytkownika</param>
+        /// <returns></returns>
+        public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel model, string login)
+        {
+            var user = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(login);
+
+            // Jeśli stare hasło jest prawidłowe
+
+
+            // zamiast == użyć metody chack z hashera
+
+            if (user.Password == model.OldPassword)
+            {
+                user.Password = model.NewPassword;
+                //try
+                //{
+                    _unitOfWork.EmployeesRepository.Update(user);
+                    var userEdited = _mapper.Map<ChangePasswordViewModel>(user);
+                    return userEdited;
+                //}
+                //catch(Exception)
+                //{
+                //    return null;
+                //}
+            }
+            else return null; // Jesli stare hasło jest nieprawidłowe
+
         }
 
     }
