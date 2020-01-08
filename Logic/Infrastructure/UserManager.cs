@@ -104,5 +104,17 @@ namespace Logic.Infrastructure
             else return null;
         }
 
+        /// <summary>
+        /// Wysyłanie maila z kodem do resetu konta
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="topic"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public async Task SendEmailAsync(int userId, string topic, string body)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

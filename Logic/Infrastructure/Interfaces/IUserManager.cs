@@ -10,5 +10,6 @@ namespace Logic.Infrastructure.Interfaces
     {
         Task<ClaimsPrincipal> LoginUser(string username, string password);
         Task<string> UserIsValid(string username, string password);
+        Task SendEmailAsync(int userId, string topic, string body);
     }
 }

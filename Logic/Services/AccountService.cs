@@ -11,6 +11,8 @@ using System.Security.Claims;
 using AutoMapper;
 using Data.Models;
 using Microsoft.Owin.Security;
+using System.Linq;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Logic.Services
 {
@@ -152,13 +154,14 @@ namespace Logic.Services
         /// <returns></returns>
         public async Task<bool> ForgotPassword(ForgotPasswordViewModel model)
         {
-            var user = await _unitOfWork.EmployeesRepository.GetUserByEmailAddressAsync(model.Email);
+            //var user = await _unitOfWork.EmployeesRepository.GetUserByEmailAddressAsync(model.Email);
+            var user = _unitOfWork.EmployeesRepository.GetAll().Where(c => c.EmailAddress == model.Email).Single();
 
             if(user != null)
             {
                 // Generowanie kodu - tymczasowego hasła
                 var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                var stringChars = new char[8];
+                var stringChars = new char[16];
                 var random = new Random();
 
                 for (int i = 0; i < stringChars.Length; i++)
@@ -168,15 +171,18 @@ namespace Logic.Services
 
                 var code = new String(stringChars);
 
+                //Multiple Parameters
+                var queryParams = new Dictionary<string, string>()
+                {
+                    {"userId", user.Id.ToString() },
+                    {"code", code }
+                };
+                var callbackUrl = QueryHelpers.AddQueryString(LogicConstants.Home + "/Account/ResetPassword", queryParams);
 
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(userId);
+                await _userManager.SendEmailAsync(user.Id, "Reset hasła",
+                    "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
 
-                //var callbackUrl = new Uri(LogicConstants.Home + "/Account/ResetPassword").AddParameter("userId", user.Id)
-                //    .AddParameter("code", code)
-                //    .ToString();
-
-                //await _userManager.SendEmailAsync(userId, "Reset hasła",
-                //    "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+                // dodać podmiane hasła na tymczasowe i aktualizacje rekordu użytkownika
 
                 return true; 
             }
