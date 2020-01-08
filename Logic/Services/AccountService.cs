@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Logic.Services.Interfaces;
 using Logic.ViewModels.Account;
 using Logic.Infrastructure;
 using Logic.Infrastructure.Interfaces;
@@ -158,9 +157,21 @@ namespace Logic.Services
             if(user != null)
             {
                 // Generowanie kodu - tymczasowego hasła
+                var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                var stringChars = new char[8];
+                var random = new Random();
+
+                for (int i = 0; i < stringChars.Length; i++)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+
+                var code = new String(stringChars);
+
+
                 //var code = await _userManager.GeneratePasswordResetTokenAsync(userId);
 
-                //var callbackUrl = new Uri(Constants.Home + "/Account/ResetPassword").AddParameter("userId", user.Id)
+                //var callbackUrl = new Uri(LogicConstants.Home + "/Account/ResetPassword").AddParameter("userId", user.Id)
                 //    .AddParameter("code", code)
                 //    .ToString();
 

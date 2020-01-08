@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using System.Web;
 using Microsoft.Owin.Host.SystemWeb;
 using BusLines.Utilities;
+using Logic.Infrastructure;
 
 namespace BusLines.Controllers
 {
@@ -244,12 +245,9 @@ namespace BusLines.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            Constants.Home = HttpContext.Request.Path;
+            LogicConstants.Home = $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
 
-
-
-
-
+            var result = _accountService.ForgotPassword(model);
 
             return RedirectToAction("ForgotPasswordConfirmation", "Account");
         }
