@@ -247,7 +247,7 @@ namespace BusLines.Controllers
 
             LogicConstants.Home = $"{this.Request.Scheme}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
 
-            var result = _accountService.ForgotPassword(model);
+            var result = await _accountService.ForgotPassword(model);
 
             return RedirectToAction("ForgotPasswordConfirmation", "Account");
         }
@@ -263,39 +263,6 @@ namespace BusLines.Controllers
         {
             return View();
         }
-
-        /// <summary>
-        ///     Zwraca widok do resetowania hasła.
-        /// </summary>
-        /// <param name="code">token</param>
-        /// <returns></returns>
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code)
-        {
-            return code == null ? View("Error") : View();
-        }
-
-        /// <summary>
-        ///     Resetuje hasło użytkownika i ustawia nowe zadane przez użytkownika.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ResetPassword(AccountResetPasswordApplicationUserViewModel model)
-        //{
-        //    //if (!ModelState.IsValid) return View(model);
-        //    //var user = await _accountService.FindUserByUserNameAsync(model.UserName);
-        //    //if (user == null)
-        //    //    // Nie pokazuj, że użytkownika nie ma w bazie
-        //    //    return RedirectToAction("ResetPasswordConfirmation", "Account");
-        //    //var result = await _accountService.ResetUserPasswordAsync(user.Id, model.Code, model.Password);
-        //    //if (result.Succeeded) return RedirectToAction("ResetPasswordConfirmation", "Account");
-        //    //AddErrors(result);
-        //    //return View();
-        //}
 
         /// <summary>
         ///     Widok potwierdzający zresetowanie hasła.

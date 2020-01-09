@@ -110,7 +110,7 @@ namespace Logic.Services
                 var result = _mapper.Map<EditProfileViewModel>(userEdited);
                 return result;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return null;
             }
@@ -125,7 +125,7 @@ namespace Logic.Services
         public async Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel model, string login)
         {
             var user = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(login);
-        
+
             var mathingPasswords = _passwordHasher.Check(user.Password, model.OldPassword);
 
             // Jeśli stare hasło jest prawidłowe
@@ -154,43 +154,55 @@ namespace Logic.Services
         /// <returns></returns>
         public async Task<bool> ForgotPassword(ForgotPasswordViewModel model)
         {
-            //var user = await _unitOfWork.EmployeesRepository.GetUserByEmailAddressAsync(model.Email);
-            var user = _unitOfWork.EmployeesRepository.GetAll().Where(c => c.EmailAddress == model.Email).Single();
-
-            if(user != null)
+            try
             {
-                // Generowanie kodu - tymczasowego hasła
-                var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                var stringChars = new char[16];
-                var random = new Random();
+                var user = _unitOfWork.EmployeesRepository.GetAll().Where(c => c.EmailAddress == model.Email).Single();
 
-                for (int i = 0; i < stringChars.Length; i++)
+                if (user != null)
                 {
-                    stringChars[i] = chars[random.Next(chars.Length)];
-                }
+                    // Generowanie kodu - tymczasowego hasła
+                    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    var stringChars = new char[16];
+                    var random = new Random();
 
-                var code = new String(stringChars);
+                    for (int i = 0; i < stringChars.Length; i++)
+                    {
+                        stringChars[i] = chars[random.Next(chars.Length)];
+                    }
 
-                //Multiple Parameters
-                var queryParams = new Dictionary<string, string>()
+                    var code = new String(stringChars);
+
+                    //Multiple Parameters
+                    var queryParams = new Dictionary<string, string>()
                 {
                     {"userId", user.Id.ToString() },
                     {"code", code }
                 };
-                var callbackUrl = QueryHelpers.AddQueryString(LogicConstants.Home + "/Account/ResetPassword", queryParams);
+                    var callbackUrl = QueryHelpers.AddQueryString(LogicConstants.Home + "/Account/ResetPassword", queryParams);
 
-                await _userManager.SendEmailAsync(user.Id, "Reset hasła",
-                    "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+                    await _userManager.SendEmailAsync(user.Id, "Reset hasła",
+                        "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
 
-                // dodać podmiane hasła na tymczasowe i aktualizacje rekordu użytkownika
-
-                return true; 
+                    // dodać podmiane hasła na tymczasowe i aktualizacje rekordu użytkownika
+                    user.Password = code;
+                    try
+                    {
+                        _unitOfWork.EmployeesRepository.Update(user);
+                        var userEdited = _mapper.Map<ChangePasswordViewModel>(user);
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+                }
+                else // Nie pokazuj, że użytkownika nie ma w bazie
+                {
+                    return false;
+                }
             }
-            else // Nie pokazuj, że użytkownika nie ma w bazie
-            {
-                return false;
+            catch (Exception) { return false; }
+
             }
         }
-
     }
-}
