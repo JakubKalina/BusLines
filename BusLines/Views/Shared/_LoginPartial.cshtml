@@ -3,12 +3,19 @@
 
 @if (User.Identity.IsAuthenticated)
 {
+        <ul class="nav navbar-nav collapse navbar-collapse">
+            <li class="@Html.IsSelected(actions: "Register", controllers: "Account")">
+                @Html.ActionLink("Rejestracja", "Register", "Account", null, new { id = "registerLink", @class = "nav-link" })
+            </li>
+        </ul>
+
     using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
         var identityClaim = ((ClaimsIdentity)User.Identity).FindFirst("FirstName");
         var userName = identityClaim == null ? User.Identity.Name : identityClaim.Value;
+
 
         <ul class="nav navbar-nav navbar-right">
             <li class="@Html.IsSelected(actions: "EditProfile", controllers: "Account")">
@@ -35,9 +42,9 @@ else
     </ul>
 
     <ul class="nav navbar-nav navbar-right">
-        <li class="@Html.IsSelected(actions: "Register", controllers: "Account")">
+        @* <li class="@Html.IsSelected(actions: "Register", controllers: "Account")">
             @Html.ActionLink("Rejestracja", "Register", "Account", null, new { id = "registerLink", @class = "nav-link" })
-        </li>
+        </li> *@
         <li class="@Html.IsSelected(actions: "Login", controllers: "Account")">
             @Html.ActionLink("Logowanie", "Login", "Account", null, new { id = "loginLink", @class = "nav-link" })
         </li>
