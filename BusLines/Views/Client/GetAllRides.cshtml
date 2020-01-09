@@ -1,0 +1,12 @@
+@model List<Logic.ViewModels.Client.GetAllRidesViewModel>
+
+<h2>Wszystkie przejazdy</h2>
+
+<ul>
+@foreach (var item in Model)
+{
+    <li>
+        @item.StartingDate
+    </li>
+}
+</ul>

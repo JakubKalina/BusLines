@@ -1,0 +1,12 @@
+@model List<Logic.ViewModels.Client.GetAllLinesViewModel>
+
+<h2>Wszystkie linie</h2>
+
+<ul>
+@foreach (var item in Model)
+{
+    <li>
+        @item.Name
+    </li>
+}
+</ul>
