@@ -1,0 +1,57 @@
+﻿@model Logic.ViewModels.Client.FindRideViewModel
+@{
+    ViewBag.Title = "Wyszukiwanie przejazdu";
+}
+
+<h2>@ViewBag.Title.</h2>
+<div class="row">
+    <div class="col-md-5">
+        <section id="loginForm">
+            @using (Html.BeginForm("FindRide", "Client", new { ViewBag.ReturnUrl }, FormMethod.Post, null, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <!--Przystanek początkowy-->
+                <div class="form-group">
+                    @Html.LabelFor(m => m.InitialBusStop, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.InitialBusStop, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.InitialBusStop, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!--Przystanek końcowy-->
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FinalBusStop, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.FinalBusStop, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FinalBusStop, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!--Data i czas od-->
+                <div class="form-group">
+                    <label asp-for="RideTimeFrom" class="control-label"></label>
+                    <input asp-for="RideTimeFrom" class="form-control" />
+                    <span asp-validation-for="RideTimeFrom" class="text-danger"></span>
+                </div>
+
+                <!--Data i czas do-->
+                <div class="form-group">
+                    <label asp-for="RideTimeTo" class="control-label"></label>
+                    <input asp-for="RideTimeTo" class="form-control" />
+                    <span asp-validation-for="RideTimeTo" class="text-danger"></span>
+                </div>
+
+                <!--Przycisk wyszukiwania-->
+                <div class="form-group">
+                    <div class="offset-md-2 col-md-10">
+                        <input type="submit" value="Wyszukaj połączenie" class="btn btn-primary" />
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
