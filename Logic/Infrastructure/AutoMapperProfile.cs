@@ -29,6 +29,9 @@ namespace Logic.Infrastructure
             CreateMap<Lines, GetAllLinesViewModel>();
             CreateMap<GetAllRidesViewModel, Rides>();
             CreateMap<Rides, GetAllRidesViewModel>();
+            CreateMap<BusStopViewModel, BusStops>();
+            CreateMap<BusStops, BusStopViewModel>();
+
         }
     }
 }

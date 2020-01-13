@@ -4,6 +4,7 @@ using Logic.ViewModels.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace BusLines.Controllers
 {
@@ -82,9 +83,9 @@ namespace BusLines.Controllers
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult FindRide(FindRideViewModel model)
+        public async Task<IActionResult> FindRide(FindRideViewModel model)
         {
-            var rides = __clientService.FindRide(model);
+            var rides = await __clientService.FindRide(model);
 
             return View("FoundRides", rides);
         }

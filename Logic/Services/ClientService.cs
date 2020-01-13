@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.UnitOfWork;
@@ -43,20 +44,51 @@ namespace Logic.Services
             return allRidesViewModel;
         }
 
-        public Task<List<RideViewModel>> FindRide(FindRideViewModel model)
+        public async Task<FoundRidesViewModel> FindRide(FindRideViewModel model)
         {
-            var initialBusStop = _unitOfWork.BusStopsRepository.GetBusStopByNameAsync(model.InitialBusStop);
-            var finalBusStop = _unitOfWork.BusStopsRepository.GetBusStopByNameAsync(model.FinalBusStop);
+            var initialBusStop = await _unitOfWork.BusStopsRepository.GetBusStopByNameAsync(model.InitialBusStop);
+            var finalBusStop = await _unitOfWork.BusStopsRepository.GetBusStopByNameAsync(model.FinalBusStop);
             var allRides = _unitOfWork.RidesRepository.GetAll();
-            foreach(var ride in allRides)
+
+            // Jeśli nie odnaleziono takiego przystanku końcowego / początkowego
+            if (initialBusStop == null || finalBusStop == null) return null;
+
+            
+            FoundRidesViewModel result = new FoundRidesViewModel()
+            {
+                InitialBusStop = _mapper.Map<BusStopViewModel>(initialBusStop),
+                FinalBusStop = _mapper.Map<BusStopViewModel>(finalBusStop),
+                RideTimeFrom = model.RideTimeFrom
+            };
+
+            foreach (var ride in allRides)
             {
                 // Sprawdzenie czy przejazd rozpoczyna się po podanej dacie i czasie
+                if(ride.StartingDate > model.RideTimeFrom)
+                {
+                    var lineId = ride.LineId;
 
-                // Wyszukanie przejazdu, który obsługuje linię, która przechodzi przez podane przystanki
+                    // Wyszystkie odcinki tras
+                    var routeSections = _unitOfWork.RouteSectionsRepository.GetAll();
+
+                    var initialBusStopSection = routeSections.Where(c => c.BusStopId == initialBusStop.Id && c.LineId == lineId).Single();
+                    var finalBusStopSection = routeSections.Where(c => c.BusStopId == finalBusStop.Id && c.LineId == lineId).Single();
+
+                    // Jeśli istnieją obie sekcje
+                    if(initialBusStopSection != null && finalBusStopSection != null)
+                    {
+
+
+
+
+
+
+                    }
+                }
             }
 
-
-            return null;
+            if (result.Rides.Count() == 0) return null;
+            else return result;
         }
     }
 }
