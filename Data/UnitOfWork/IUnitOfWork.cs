@@ -7,7 +7,7 @@ namespace Data.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<BusStops> BusStopsRepository { get; }
+        IBusStopsRepository BusStopsRepository { get; }
         IEmployeesRepository EmployeesRepository { get; }
         IGenericRepository<Lines> LinesRepository { get; }
         IGenericRepository<Rides> RidesRepository { get; }

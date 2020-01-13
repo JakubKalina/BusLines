@@ -1,0 +1,16 @@
+﻿@model Logic.ViewModels.Client.FoundRidesViewModel
+@{
+    ViewData["Title"] = "FoundRides";
+}
+
+<h3>Przystanek początkowy: @Model.InitialBusStop</h3>
+<h3>Przystanek końcowy: @Model.FinalBusStop</h3>
+<h4>Data i czas przejazu: @Model.RideTimeFrom</h4>
+
+<hr />
+<br />
+@foreach(var ride in Model.Rides)
+{
+    <p>Nazwa linii: @ride.LineName</p>
+    <p>Czas wyjazdu: @ride.RideTime</p>
+}

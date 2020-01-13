@@ -47,7 +47,7 @@ namespace BusLines
             services.AddMvc().AddControllersAsServices();
 
 
-            services.AddScoped<IGenericRepository<BusStops>, GenericRepository<BusStops>>();
+            services.AddScoped<IBusStopsRepository, BusStopsRepository>();
             services.AddScoped<IEmployeesRepository, EmployeesRepository>();
             services.AddScoped<IGenericRepository<Lines>, GenericRepository<Lines>>();
             services.AddScoped<IGenericRepository<Rides>, GenericRepository<Rides>>();

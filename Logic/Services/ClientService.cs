@@ -42,5 +42,21 @@ namespace Logic.Services
             var allRidesViewModel = _mapper.Map<List<GetAllRidesViewModel>>(allRides);
             return allRidesViewModel;
         }
+
+        public Task<List<RideViewModel>> FindRide(FindRideViewModel model)
+        {
+            var initialBusStop = _unitOfWork.BusStopsRepository.GetBusStopByNameAsync(model.InitialBusStop);
+            var finalBusStop = _unitOfWork.BusStopsRepository.GetBusStopByNameAsync(model.FinalBusStop);
+            var allRides = _unitOfWork.RidesRepository.GetAll();
+            foreach(var ride in allRides)
+            {
+                // Sprawdzenie czy przejazd rozpoczyna się po podanej dacie i czasie
+
+                // Wyszukanie przejazdu, który obsługuje linię, która przechodzi przez podane przystanki
+            }
+
+
+            return null;
+        }
     }
 }

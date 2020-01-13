@@ -84,7 +84,9 @@ namespace BusLines.Controllers
         [AllowAnonymous]
         public IActionResult FindRide(FindRideViewModel model)
         {
-            throw new NotImplementedException();
+            var rides = __clientService.FindRide(model);
+
+            return View("FoundRides", rides);
         }
 
 

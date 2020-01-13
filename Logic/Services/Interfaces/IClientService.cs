@@ -9,5 +9,6 @@ namespace Logic.Services.Interfaces
          List<GetAllBusStopsViewModel> GetAllBusStops();
          List<GetAllLinesViewModel> GetAllLines();
          List<GetAllRidesViewModel> GetAllRides();
+         Task<List<RideViewModel>> FindRide(FindRideViewModel model);
     }
 }

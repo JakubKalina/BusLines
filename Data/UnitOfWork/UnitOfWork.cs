@@ -7,7 +7,7 @@ namespace Data.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly LinieAutobusoweContext _context;
-        private GenericRepository<BusStops> _busStopsRepository;
+        private BusStopsRepository _busStopsRepository;
         private EmployeesRepository _employeesRepository;
         private GenericRepository<Lines> _linesRepository;
         private GenericRepository<Rides> _ridesRepository;
@@ -22,8 +22,8 @@ namespace Data.UnitOfWork
             _context = context;
         }
 
-        public IGenericRepository<BusStops> BusStopsRepository =>
-            _busStopsRepository ?? (_busStopsRepository = new GenericRepository<BusStops>(_context));
+        public IBusStopsRepository BusStopsRepository =>
+            _busStopsRepository ?? (_busStopsRepository = new BusStopsRepository(_context));
 
         public IEmployeesRepository EmployeesRepository =>
             _employeesRepository ?? (_employeesRepository = new EmployeesRepository(_context));

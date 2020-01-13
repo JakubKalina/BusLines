@@ -20,10 +20,5 @@ namespace Logic.ViewModels.Client
         /// Czas przejazdu od
         /// </summary>
         public DateTime RideTimeFrom { get; set; }
-
-        /// <summary>
-        /// Czas przejazdu do
-        /// </summary>
-        public DateTime RideTimeTo { get; set; }
     }
 }
