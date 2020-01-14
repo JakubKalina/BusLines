@@ -68,22 +68,36 @@ namespace Logic.Services
                 {
                     var lineId = ride.LineId;
 
-                    // Wyszystkie odcinki tras
-                    var routeSections = _unitOfWork.RouteSectionsRepository.GetAll();
+                    // Wyszystkie odcinki tras dla danej linii
+                    var routeSections = _unitOfWork.RouteSectionsRepository.GetAll().Where(c => c.LineId == lineId).OrderBy(o => o.RecordNumber).ToList();
 
-                    var initialBusStopSection = routeSections.Where(c => c.BusStopId == initialBusStop.Id && c.LineId == lineId).Single();
-                    var finalBusStopSection = routeSections.Where(c => c.BusStopId == finalBusStop.Id && c.LineId == lineId).Single();
+                    var initialBusStopSection = routeSections.Where(c => c.BusStopId == initialBusStop.Id).Single();
+                    var finalBusStopSection = routeSections.Where(c => c.BusStopId == finalBusStop.Id).Single();
 
                     // Jeśli istnieją obie sekcje
                     if(initialBusStopSection != null && finalBusStopSection != null)
                     {
+                        RideViewModel rideViewModel = new RideViewModel();
+                        // Wyliczenie dostępnych miejsc
+                        var vehicle = _unitOfWork.VehiclesRepository.GetById(ride.VehicleId);
+                        rideViewModel.AvailableSeats = (vehicle.NumberOfSeats - ride.OccupiedSeats);
 
+                        // Pętla po wszystkich odcinkach trasy
+                        foreach(var section in routeSections)
+                        {
+                            rideViewModel.FinalDistance += section.Distance;
+                            rideViewModel.FinalPrice += section.Price;
+                            rideViewModel.FinalTime += section.Time;
+                        }
+                        
+                        // Mocno przetestować w domu !
+                        // TODO:
+                        // DOdąć kilka przykłądowych przejazdów i je potestować czy to wszystko ładnie chodzi jak należy
 
-
-
-
-
+                        result.Rides.Add(rideViewModel);
                     }
+
+
                 }
             }
 
