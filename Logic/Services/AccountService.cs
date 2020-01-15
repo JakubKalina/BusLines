@@ -61,19 +61,21 @@ namespace Logic.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<bool> RegisterAsync(UserRegisterViewModel viewModel)
+        public async Task<string> RegisterAsync(UserRegisterViewModel viewModel)
         {
             var model = _mapper.Map<Employees>(viewModel);
 
-            var allEmployees = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(model.Login);
+            var userByLogin = await _unitOfWork.EmployeesRepository.GetUserByUsernameAsync(model.Login);
+            var userByEmail = await _unitOfWork.EmployeesRepository.GetUserByEmailAddressAsync(model.EmailAddress);
 
-            // Dodać wyszukiwanie czy nie istnieje już taki użytkownik
-            // TODO
+            // Wyszukiwanie czy nie istnieje już taki użytkownik
+            if (userByLogin != null) return "Podana nazwa użytkownika jest już zajęta";
+            if (userByEmail != null) return "Podany adres email jest już zajęty";
 
             _unitOfWork.EmployeesRepository.Create(model);
             _unitOfWork.EmployeesRepository.Save();
 
-            return true;
+            return null;
         }
 
         /// <summary>

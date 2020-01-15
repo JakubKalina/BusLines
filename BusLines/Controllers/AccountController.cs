@@ -100,14 +100,14 @@ namespace BusLines.Controllers
 
             var result = await  _accountService.RegisterAsync(model);
                   
-            if(result == true)
+            if(result == null)
             {
                 return RedirectToAction("Login");//wyświetlić komunikat, że się udało
             }
             else
             {
                 //Wyświetlenie informacji o nieprawidłowych danych
-                ModelState.AddModelError("", "Wprowadzono nieprawidłowe dane.");
+                ModelState.AddModelError("", result);
 
                 return View(model);
             }

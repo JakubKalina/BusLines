@@ -10,7 +10,7 @@ namespace Logic.Services.Interfaces
     public interface IAccountService
     {
         Task<ClaimsPrincipal> LoginAsync(UserLoginViewModel model);
-        Task<bool> RegisterAsync(UserRegisterViewModel model);
+        Task<string> RegisterAsync(UserRegisterViewModel model);
         Task<EditProfileViewModel> EditProfileAsync(string login);
         Task<EditProfileViewModel> EditProfileAsync(EditProfileViewModel model, string login);
         Task<ChangePasswordViewModel> ChangePasswordAsync(ChangePasswordViewModel model, string login);
