@@ -114,7 +114,6 @@ namespace BusLines.Controllers
 
         #endregion
 
-
         #region  RouteSections
 
         // Wyświetlenie wszystkich odcinków tras
@@ -125,13 +124,62 @@ namespace BusLines.Controllers
             return View();
         }
 
+        // Dodanie nowego odcinka trasy
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewRouteSection()
+        {
+            return View();
+        }
+
+        // Dodanie nowego odcinka trasy do bazy danych
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewRouteSection(AddRouteSectionViewModel model)
+        {
+            return View();
+        }
+
+        
+        // Usunięcie odcinka trasy
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteRouteSection(int routeSectionId)
+        {
+            return View();
+        }
+
+        // Zwraca widok edycji odcinka trasy
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditRouteSection(int routeSectionId)
+        {
+            return View();
+        }
+
+        // Dokonuje edycji odcinka trasy
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditRouteSection(EditRouteSectionViewModel model)
+        {
+            return View();
+        }
+
         #endregion
 
         #region Employees
         // Wyświetlenie wszystkich pracowników
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetAllEmployees()
+        public IActionResult GetAllDrivers()
+        {
+            return View();
+        }
+
+        // Wyświetlenie przejazdów danego kierowcy
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetDriverRides(int employeeId)
         {
             return View();
         }
@@ -146,6 +194,14 @@ namespace BusLines.Controllers
         {
             return View();
         }
+
+        // Wyświetlenie szczegółów danego biletu
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetTicketDetails(int ticketId)
+        {
+            return View();
+        }
         #endregion
 
         #region  Rides
@@ -156,13 +212,62 @@ namespace BusLines.Controllers
         {
             return View();
         }
+
+        // Dodanie nowego przejazdu
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewRide()
+        {
+            return View();
+        }
+
+        // Dodanie nowego przejazdu do bazy danych
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewRide(AddRideViewModel model)
+        {
+            return View();
+        }
+
+        // Usunięcie przejazdu
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteRide(int rideId)
+        {
+            return View();
+        }
+
+        // Zwraca widok edycji przejazdu
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditRide(int rideId)
+        {
+            return View();
+        }
+
+        // Dokonuje edycji przejazdu
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditRide(EditRideViewModel model)
+        {
+            return View();
+        }
         #endregion
 
         #region Shifts
+
         // Wyświetlenie wszystkich zmian kierowców
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult GetAllShifts()
+        {
+            return View();
+        }
+
+        // WYświetlenie wszystkich obecnie niezakończonych zmian (pracowników w pracy)
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetAllUnfinishedShifts()
         {
             return View();
         }
@@ -176,6 +281,49 @@ namespace BusLines.Controllers
         {
             return View();
         }
+
+        // Dodanie nowego pojazdu
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewVehicle()
+        {
+            return View();
+        }
+
+        // Dodanie nowego pojazdu do bazy danych
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddNewVehicle(AddVehicleViewModel model)
+        {
+            return View();
+        }
+
+        
+        // Usunięcie pojazdu
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteVehicle(int vehicleId)
+        {
+            return View();
+        }
+
+        // Zwraca widok edycji pojazdu
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditVehicle(int vehicleId)
+        {
+            return View();
+        }
+
+        // Dokonuje edycji pojazdu
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditVehicle(EditVehicleViewModel model)
+        {
+            return View();
+        }
+
+
         #endregion
 
         #region VisitedBusStops
@@ -188,6 +336,5 @@ namespace BusLines.Controllers
         }
         #endregion
 
-    
     }
 }
