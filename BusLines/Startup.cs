@@ -59,6 +59,8 @@ namespace BusLines
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IDriverService, DriverService>();
+            services.AddScoped<IAdminService, AdminService>();
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();

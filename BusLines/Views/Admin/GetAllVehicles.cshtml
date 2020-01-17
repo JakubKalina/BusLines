@@ -1,0 +1,35 @@
+@model List<Logic.ViewModels.Admin.VehicleViewModel>
+
+@{
+    ViewBag.Title = "Wszystkie pojazdy";
+}
+
+@{int vehicleIndex = 0;}
+
+<h2>@ViewBag.Title.</h2>
+
+<table class="table">
+
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Numer rejestracyjny</th>
+      <th scope="col">Rok produkcji</th>
+      <th scope="col">Ilość siedzeń</th>
+    </tr>
+  </thead>
+
+  <tbody>
+@foreach (var vehicle in Model)
+{
+    vehicleIndex++;
+    <tr>
+      <th scope="row">@vehicleIndex</th>
+      <td>@vehicle.RegistrationNumber</td>
+      <td>@vehicle.YearOfProduction</td>
+      <td>@vehicle.NumberOfSeats</td>
+    </tr>
+}
+
+  </tbody>
+</table>

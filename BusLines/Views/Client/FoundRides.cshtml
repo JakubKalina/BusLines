@@ -2,15 +2,37 @@
 @{
     ViewData["Title"] = "FoundRides";
 }
-
-<h3>Przystanek początkowy: @Model.InitialBusStop</h3>
-<h3>Przystanek końcowy: @Model.FinalBusStop</h3>
+@if(Model != null) {
+<br>
+<h3>Przystanek początkowy: @Model.InitialBusStop.Name</h3>
+<h3>Przystanek końcowy: @Model.FinalBusStop.Name</h3>
 <h4>Data i czas przejazu: @Model.RideTimeFrom</h4>
 
 <hr />
 <br />
 @foreach(var ride in Model.Rides)
 {
-    <p>Nazwa linii: @ride.LineName</p>
-    <p>Czas wyjazdu: @ride.RideTime</p>
+    @Html.HiddenFor(c => c.FinalBusStop);
+    @Html.HiddenFor(c => c.InitialBusStop);
+    @Html.HiddenFor(c => c.RideTimeFrom);
+
+    <p>
+        Nazwa linii: @ride.LineName<br>
+        Czas wyjazdu: @ride.RideTime<br>
+        Liczba dostępnych miejsc: @ride.AvailableSeats<br>
+        Cena: @ride.FinalPrice<br>
+        Dystans: @ride.FinalDistance<br>
+        Czas przejazdu: @ride.FinalTime<br>
+        @Html.ActionLink("Kup bilet", "GetPurchaseSummary", "Client", new { rideId = ride.Id, initialBusStopId = Model.InitialBusStop.Id, finalBusStopId = Model.FinalBusStop.Id}, null )
+    </p>
+    <hr>
+}
+} else {
+    <br>
+    <br>
+    <h3>
+        Nie udało się odnaleźć połączenia dla podanych kryteriów wyszukiwania
+    </h3>
+    <br>
+    <hr>
 }

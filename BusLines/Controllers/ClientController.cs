@@ -90,6 +90,28 @@ namespace BusLines.Controllers
             return View("FoundRides", rides);
         }
 
+        // Wyświetlenie formy podsumowującej zakup wymagającej podania danych do zakupu
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetPurchaseSummary(int rideId, int initialBusStopId, int finalBusStopId) {
+
+            PurchaseViewModel model = new PurchaseViewModel() {
+                RideId = rideId,
+                InitialBusStopId = initialBusStopId,
+                FinalBusStopId = finalBusStopId
+            };
+            return View("PurchaseRide", model);
+        }
+
+        // Dokonanie zakupu biletu
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> PurchaseRide(PurchaseViewModel model)
+        {
+            var result = await __clientService.PurchaseRide(model);
+            return View("PurchaseSuccessful");
+        }
+
 
     }
 }

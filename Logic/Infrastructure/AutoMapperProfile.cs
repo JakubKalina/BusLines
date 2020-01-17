@@ -3,6 +3,7 @@ using Data.Models;
 using Logic.ViewModels.Account;
 using Logic.ViewModels.Admin;
 using Logic.ViewModels.Client;
+using Logic.ViewModels.Driver;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -54,6 +55,12 @@ namespace Logic.Infrastructure
             CreateMap<RouteSections, EditRouteSectionViewModel>();
             CreateMap<EditVehicleViewModel, Vehicles>();
             CreateMap<Vehicles, EditVehicleViewModel>();
+            CreateMap<VehicleViewModel, Vehicles>();
+            CreateMap<Vehicles, VehicleViewModel>();
+
+            // Dla DriverController
+            CreateMap<DriverShiftsViewModel, Shifts>();
+            CreateMap<Shifts, DriverShiftsViewModel>();
 
         }
     }

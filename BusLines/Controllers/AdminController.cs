@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Logic.Services.Interfaces;
 using Logic.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,13 @@ namespace BusLines.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly IAdminService _adminService;
+
+        public AdminController(IAdminService adminService)
+        {
+            _adminService = adminService;
+        }
+        
         #region BusLines
         // Wyświetlenie wszystkich linii autobusowych
         [HttpGet]
@@ -279,7 +287,8 @@ namespace BusLines.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult GetAllVehicles()
         {
-            return View();
+            var models = _adminService.GetAllVehicles();
+            return View(models);
         }
 
         // Dodanie nowego pojazdu

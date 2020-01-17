@@ -5,6 +5,11 @@ namespace Logic.ViewModels.Client
     public class RideViewModel
     {
         /// <summary>
+        /// Id przejazdu
+        /// </summary>
+        public int Id { get; set; }
+        
+        /// <summary>
         /// Godzina odjazdu autobusu
         /// </summary>
         public DateTime RideTime { get; set; }
@@ -15,7 +20,7 @@ namespace Logic.ViewModels.Client
         public string LineName { get; set; }
 
         /// <summary>
-        /// Liczba dostêpnych miejsc
+        /// Liczba dostï¿½pnych miejsc
         /// </summary>
         public int AvailableSeats { get; set; }
 
@@ -25,7 +30,7 @@ namespace Logic.ViewModels.Client
         public decimal FinalPrice { get; set; }
 
         /// <summary>
-        /// D³ugoœæ trasy
+        /// Dï¿½ugoï¿½ï¿½ trasy
         /// </summary>
         public int FinalDistance { get; set; }
 

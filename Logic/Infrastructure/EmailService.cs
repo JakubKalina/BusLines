@@ -19,8 +19,8 @@ namespace Logic.Infrastructure
         private static async Task ConfigSendGridAsync(IdentityMessage message)
         {
             var credentials = new NetworkCredential(
-                "login nadawcy",
-                "hasło nadawcy"
+                "buslines123@gmail.com",
+                "BusLines123!"
             );
 
             // Wyślij email
@@ -33,7 +33,7 @@ namespace Logic.Infrastructure
             {
                 var mail = new MailMessage
                 {
-                    From = new MailAddress("adres email nadawcy", "BusLines"),
+                    From = new MailAddress("buslines123@gmail.com", "BusLines"),
                     Body = message.Body,
                     BodyEncoding = Encoding.UTF8,
                     Subject = message.Subject,
@@ -41,7 +41,7 @@ namespace Logic.Infrastructure
                     IsBodyHtml = true
                 };
 
-                var client = new SmtpClient("smtp-u9hna.vipserv.org")
+                var client = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
                     UseDefaultCredentials = false,
@@ -55,6 +55,52 @@ namespace Logic.Infrastructure
             {
                 // ignored
             }
+        }
+
+        public static void SendEmail(string subject, string messageBody, string emailAddress, string username)
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("buslines123@gmail.com");
+                mail.To.Add(emailAddress);
+                mail.Subject = subject;
+                mail.Body = "<h3>" + messageBody + "</h3>";
+                mail.IsBodyHtml = true;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential("buslines123@gmail.com", "BusLines123!");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+            }
+                        
+
+
+
+        // var fromAddress = new MailAddress("buslines123@gmail.com", "Bus Lines");
+        // var toAddress = new MailAddress(emailAddress, username);
+        // const string fromPassword = "BusLines123!";
+
+        // var smtp = new SmtpClient
+        // {
+        //     Host = "smtp.gmail.com",
+        //     Port = 587,
+        //     EnableSsl = true,
+        //     DeliveryMethod = SmtpDeliveryMethod.Network,
+        //     Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+        //     UseDefaultCredentials = false,
+        //     Timeout = 20000
+        // };
+        // using (var message = new MailMessage(fromAddress, toAddress)
+        // {
+        //     Subject = subject,
+        //     Body = messageBody
+        // })
+        // {
+        //     smtp.Send(message);
+        // }
         }
     }
 }

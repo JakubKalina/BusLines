@@ -23,9 +23,6 @@ namespace Logic.Services
         private readonly IMapper _mapper;
         private readonly IPasswordHasher _passwordHasher;
 
-
-        private static bool _firstRun = true;
-
         public AccountService(IUnitOfWork unitOfWork, IUserManager userManager, IMapper mapper, IPasswordHasher passwordHasher)
         {
             _unitOfWork = unitOfWork;

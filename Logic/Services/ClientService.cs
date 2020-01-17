@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Data.Models;
 using Data.UnitOfWork;
+using Logic.Infrastructure;
 using Logic.Services.Interfaces;
 using Logic.ViewModels.Client;
+using Microsoft.AspNet.Identity;
 
 namespace Logic.Services
 {
@@ -14,10 +17,13 @@ namespace Logic.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
+        private readonly EmailService emailService;
+
         public ClientService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            emailService = new EmailService();
         }
 
         // Zwraca listę wszystkich przystanków autobusowych
@@ -58,7 +64,8 @@ namespace Logic.Services
             {
                 InitialBusStop = _mapper.Map<BusStopViewModel>(initialBusStop),
                 FinalBusStop = _mapper.Map<BusStopViewModel>(finalBusStop),
-                RideTimeFrom = model.RideTimeFrom
+                RideTimeFrom = model.RideTimeFrom,
+                Rides = new List<RideViewModel>()
             };
 
             foreach (var ride in allRides)
@@ -70,14 +77,18 @@ namespace Logic.Services
 
                     // Wyszystkie odcinki tras dla danej linii
                     var routeSections = _unitOfWork.RouteSectionsRepository.GetAll().Where(c => c.LineId == lineId).OrderBy(o => o.RecordNumber).ToList();
-
-                    var initialBusStopSection = routeSections.Where(c => c.BusStopId == initialBusStop.Id).Single();
-                    var finalBusStopSection = routeSections.Where(c => c.BusStopId == finalBusStop.Id).Single();
+                    var line = _unitOfWork.LinesRepository.GetById(lineId);
+                    var initialBusStopSection = routeSections.Where(c => c.BusStopId == initialBusStop.Id).FirstOrDefault();
+                    var finalBusStopSection = routeSections.Where(c => c.BusStopId == finalBusStop.Id).FirstOrDefault();
 
                     // Jeśli istnieją obie sekcje
                     if(initialBusStopSection != null && finalBusStopSection != null)
                     {
-                        RideViewModel rideViewModel = new RideViewModel();
+                        RideViewModel rideViewModel = new RideViewModel() {
+                            Id = ride.Id,
+                            RideTime = ride.StartingDate,
+                            LineName = line.Name
+                        };
                         // Wyliczenie dostępnych miejsc
                         var vehicle = _unitOfWork.VehiclesRepository.GetById(ride.VehicleId);
                         rideViewModel.AvailableSeats = (vehicle.NumberOfSeats - ride.OccupiedSeats);
@@ -90,10 +101,6 @@ namespace Logic.Services
                             rideViewModel.FinalTime += section.Time;
                         }
                         
-                        // Mocno przetestować w domu !
-                        // TODO:
-                        // DOdąć kilka przykłądowych przejazdów i je potestować czy to wszystko ładnie chodzi jak należy
-
                         result.Rides.Add(rideViewModel);
                     }
 
@@ -103,6 +110,32 @@ namespace Logic.Services
 
             if (result.Rides.Count() == 0) return null;
             else return result;
+        }
+
+        // Dokonuje zakupu nowego biletu
+        public async Task<bool> PurchaseRide(PurchaseViewModel model)
+        {
+            // Wysłanie maila z biletem
+            EmailService.SendEmail("Kupiono nowy bilet", "Witaj! <br><hr> Właśnie wykupiłeś nowy bilet w systemie BusLines! <br><br> Życzymy przyjemnej podróży", model.Passenger.Email, model.Passenger.Name);
+
+            try
+            {
+                Tickets newTicket = new Tickets() {
+                    Email = model.Passenger.Email,
+                    Name = model.Passenger.Name,
+                    Surname = model.Passenger.Surname,
+                    RideId = model.RideId,
+                    InitialBusStopId = model.InitialBusStopId,
+                    FinalBusStopId = model.FinalBusStopId
+                };
+                _unitOfWork.TicketsRepository.Create(newTicket);
+                _unitOfWork.TicketsRepository.Save();
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
     }
 }

@@ -1,0 +1,17 @@
+@model List<Logic.ViewModels.Driver.DriverShiftsViewModel>
+
+@{
+    ViewBag.Title = "Zmiany pracownika";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul>
+@{int index = 1;}
+@foreach (var shift in Model)
+{
+    <li>
+        @index - Data rozpoczęcia: @shift.StartTime,  Data zakończenia: @shift.FinishTime
+    </li>
+} 
+</ul>

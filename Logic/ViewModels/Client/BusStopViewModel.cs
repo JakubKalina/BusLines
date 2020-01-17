@@ -7,6 +7,11 @@ namespace Logic.ViewModels.Client
     public class BusStopViewModel
     {
         /// <summary>
+        /// Id
+        /// </summary>
+        public int Id { get; set; }
+        
+        /// <summary>
         /// Miasto
         /// </summary>
         public string City { get; set; }

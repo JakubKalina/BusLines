@@ -1,11 +1,57 @@
 ﻿@using System.Security.Claims
 @using BusLines.Utilities
 
-@if (User.Identity.IsAuthenticated)
+@if (User.IsInRole("Admin"))
 {
         <ul class="nav navbar-nav  ">
             <li class="@Html.IsSelected(actions: "Register", controllers: "Account")">
                 @Html.ActionLink("Rejestracja", "Register", "Account", null, new { id = "registerLink", @class = "nav-link" })
+            </li>
+
+            <li class="@Html.IsSelected(actions: "Register", controllers: "Account") dropdown">
+
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Pojazdy
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                @Html.ActionLink("Dodaj nowy", "AddNewVehicle", "Admin", null, new { id = "registerLink", @class = "dropdown-item" })
+
+                <div class="dropdown-divider"></div>
+
+                @Html.ActionLink("Wyświetl wszystkie", "GetAllVehicles", "Admin", null, new { id = "registerLink", @class = "dropdown-item" })
+
+                </div>
+
+                
+            </li>
+
+        </ul>
+
+
+    using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        var identityClaim = ((ClaimsIdentity)User.Identity).FindFirst("FirstName");
+        var userName = identityClaim == null ? User.Identity.Name : identityClaim.Value;
+
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="@Html.IsSelected(actions: "EditProfile", controllers: "Account")">
+                @Html.ActionLink("Witaj " + userName + "!", "EditProfile", "Account", null, new { title = "Edycja profilu", @class = "nav-link" })
+            </li>
+            <li>
+                <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Wyloguj się</a>
+            </li>
+        </ul>
+    }
+}
+else if(User.IsInRole("Kierowca"))
+{
+        <ul class="nav navbar-nav  ">
+            <li class="@Html.IsSelected(actions: "ShowDriverShifts", controllers: "Driver")">
+                @Html.ActionLink("Zmiany", "ShowDriverShifts", "Driver", null, new { @class = "nav-link" })
             </li>
         </ul>
 
@@ -38,6 +84,9 @@ else
         </li>
         <li class="@Html.IsSelected(actions: "GetAllRides", controllers: "Client")">
             @Html.ActionLink("Przejazdy", "GetAllRides", "Client", null, new { id = "loginLink", @class = "nav-link" })
+        </li>
+        <li class="@Html.IsSelected(actions: "FindRide", controllers: "Client")">
+            @Html.ActionLink("Wyszukaj przejazd", "FindRide", "Client", null, new { id = "loginLink", @class = "nav-link" })
         </li>
     </ul>
 

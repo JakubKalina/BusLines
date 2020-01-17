@@ -75,8 +75,7 @@ namespace BusLines.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
             return View();
@@ -88,8 +87,7 @@ namespace BusLines.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(UserRegisterViewModel model)
         {

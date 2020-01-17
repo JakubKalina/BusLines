@@ -11,6 +11,7 @@ using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Host.SystemWeb;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Logic.Infrastructure
 {
@@ -56,7 +57,7 @@ namespace Logic.Infrastructure
                     claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, username),
-                        new Claim(ClaimTypes.Role, "Kierowca")
+                        new Claim(ClaimTypes.Role, "Admin")
                     };
                 }
                 else return null;
@@ -117,4 +118,5 @@ namespace Logic.Infrastructure
         }
 
     }
+
 }
