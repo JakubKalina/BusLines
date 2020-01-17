@@ -304,6 +304,7 @@ namespace BusLines.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult AddNewVehicle(AddVehicleViewModel model)
         {
+            _adminService.AddNewVehicle(model);
             return View();
         }
 
@@ -313,7 +314,8 @@ namespace BusLines.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteVehicle(int vehicleId)
         {
-            return View();
+            _adminService.DeleteVehicle(vehicleId);
+            return RedirectToAction("GetAllVehicles");
         }
 
         // Zwraca widok edycji pojazdu
@@ -321,7 +323,8 @@ namespace BusLines.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult EditVehicle(int vehicleId)
         {
-            return View();
+            var model = _adminService.EditVehicleGet(vehicleId);
+            return View(model);
         }
 
         // Dokonuje edycji pojazdu
@@ -329,7 +332,8 @@ namespace BusLines.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult EditVehicle(EditVehicleViewModel model)
         {
-            return View();
+            _adminService.EditVehiclePost(model);
+            return RedirectToAction("GetAllVehicles");
         }
 
 

@@ -6,12 +6,30 @@
 
 <h2>@ViewBag.Title</h2>
 
-<ul>
 @{int index = 1;}
+
+<table class="table">
+
+  <thead>
+    <tr>
+      <th scope="col">Indeks</th>
+      <th scope="col">Data rozpoczęcia</th>
+      <th scope="col">Data zakończenia</th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+
 @foreach (var shift in Model)
 {
-    <li>
-        @index - Data rozpoczęcia: @shift.StartTime,  Data zakończenia: @shift.FinishTime
-    </li>
+        <tr>
+      <th scope="row">@index</th>
+      <td>@shift.StartTime</td>
+      <td>@shift.FinishTime</td>
+    </tr>
+    index++;
 } 
-</ul>
+
+  </tbody>
+</table>

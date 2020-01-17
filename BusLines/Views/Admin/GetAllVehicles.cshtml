@@ -4,6 +4,11 @@
     ViewBag.Title = "Wszystkie pojazdy";
 }
 
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
 @{int vehicleIndex = 0;}
 
 <h2>@ViewBag.Title.</h2>
@@ -16,6 +21,8 @@
       <th scope="col">Numer rejestracyjny</th>
       <th scope="col">Rok produkcji</th>
       <th scope="col">Ilość siedzeń</th>
+      <th scope="col">Usuń</th>
+      <th scope="col">Edytuj</th>
     </tr>
   </thead>
 
@@ -28,8 +35,22 @@
       <td>@vehicle.RegistrationNumber</td>
       <td>@vehicle.YearOfProduction</td>
       <td>@vehicle.NumberOfSeats</td>
+      <td>
+        <a href="@Url.Action("DeleteVehicle","Admin",new {vehicleId= @vehicle.Id})">
+        <span class="glyphicon glyphicon-trash">
+        </span>
+        </a>
+      </td>
+
+      <td>
+        <a href="@Url.Action("EditVehicle","Admin",new {vehicleId= @vehicle.Id})">
+          <span class="glyphicon glyphicon-edit">
+          </span>
+        </a>
+      </td>
     </tr>
 }
 
   </tbody>
 </table>
+
